@@ -1,0 +1,22 @@
+# Debug logs (generated at runtime)
+.debug/
+.serena/
+
+# Claude Code local settings
+.claude/
+
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/
+*.swp
+*.swo

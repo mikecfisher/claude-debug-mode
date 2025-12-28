@@ -1,0 +1,12 @@
+{
+  "name": "debug-mode",
+  "description": "Hypothesis-driven debugging with runtime log instrumentation. Use for bug reports, unexpected behavior, or when runtime evidence is needed.",
+  "version": "1.0.0",
+  "license": "MIT",
+  "keywords": ["debugging", "logging", "hypothesis", "instrumentation", "runtime"],
+  "author": {
+    "name": "Mike Fisher"
+  },
+  "homepage": "https://github.com/mikecfisher/claude-debug-mode",
+  "repository": "https://github.com/mikecfisher/claude-debug-mode"
+}
