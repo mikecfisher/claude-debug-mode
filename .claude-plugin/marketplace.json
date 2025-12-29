@@ -10,7 +10,7 @@
     {
       "name": "debug-mode",
       "description": "Hypothesis-driven debugging with runtime log instrumentation. Use for bug reports, unexpected behavior, or when runtime evidence is needed.",
-      "source": ".",
+      "source": "./",
       "category": "development",
       "version": "1.0.0",
       "author": {
