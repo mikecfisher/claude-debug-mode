@@ -16,15 +16,17 @@ Debug Mode forces a disciplined debugging process:
 
 ### Option 1: From Plugin Marketplace
 
-In Claude Code interactive mode:
+First, add the marketplace:
+```
+/plugin marketplace add mikecfisher/claude-debug-mode
+```
+
+Then install the plugin:
 ```
 /plugin install debug-mode@mikecfisher-claude-debug-mode
 ```
 
-Or via CLI:
-```bash
-claude plugin install debug-mode@mikecfisher-claude-debug-mode
-```
+Restart Claude Code to load the plugin.
 
 ### Option 2: Local Development
 
