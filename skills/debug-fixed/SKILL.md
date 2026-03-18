@@ -16,6 +16,7 @@ $ARGUMENTS
 ### Step 1: Remove Instrumentation
 
 Remove all `__debugLog()` calls from instrumented files:
+
 - All `__debugLog(...)` calls
 - The logger function declaration at the top of each file
 - Any imports added for the logger (e.g., `appendFileSync`, `mkdirSync`, `existsSync`)
@@ -23,7 +24,7 @@ Remove all `__debugLog()` calls from instrumented files:
 ### Step 2: Stop Collector
 
 ```bash
-bun ${CLAUDE_PLUGIN_ROOT}/scripts/stop-collector.mjs
+bun ./scripts/stop-collector.mjs
 ```
 
 ### Step 3: Summarize
@@ -43,11 +44,13 @@ Provide a brief summary:
 > **Fix Applied:** Added null check with default empty array: `const items = order.items ?? []`
 >
 > **Files Modified:**
+>
 > - `src/api/orders.ts` - Added defensive check in `processOrder()`
 
 ## Optional Cleanup
 
 The `.debug/` directory can be left in place (it's gitignored) or removed:
+
 ```bash
 rm -rf .debug
 ```

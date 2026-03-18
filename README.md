@@ -1,4 +1,4 @@
-# Debug Mode for Claude Code
+# Debug Mode Skills
 
 This tool recreates Debug Mode found in other popular agentic code editors.
 
@@ -14,21 +14,55 @@ Debug Mode forces a disciplined debugging process:
 
 ## Installation
 
-### Option 1: From Plugin Marketplace
+### Option 1: Install as portable skills
+
+The repo is packaged as a `skills.sh` bundle and can be installed into multiple agents from the same source.
+
+Install into Codex:
+
+```bash
+bunx skills add https://github.com/mikecfisher/claude-debug-mode --agent codex -y
+```
+
+Install into Claude Code:
+
+```bash
+bunx skills add https://github.com/mikecfisher/claude-debug-mode --agent claude-code -y
+```
+
+Install from a local checkout during development:
+
+```bash
+bunx skills add /absolute/path/to/claude-debug-mode --agent codex -y
+bunx skills add /absolute/path/to/claude-debug-mode --agent claude-code -y
+```
+
+The bundle exposes three skills:
+
+- `debug-mode`
+- `debug-reproduced`
+- `debug-fixed`
+
+The skill runtime is self-contained. Each installed skill carries its own helper scripts, so it does not depend on `CLAUDE_PLUGIN_ROOT` or repo-root script paths.
+
+### Option 2: Claude plugin marketplace
 
 First, add the marketplace:
+
 ```
 /plugin marketplace add mikecfisher/claude-debug-mode
 ```
 
 Then install the plugin:
+
 ```
 /plugin install debug-mode@mikecfisher-claude-debug-mode
 ```
 
 Restart Claude Code to load the plugin.
+Restart Codex after installing skills there so the new skills are picked up.
 
-### Option 2: Local Development
+### Option 3: Claude plugin local development
 
 ```bash
 git clone https://github.com/mikecfisher/claude-debug-mode.git
@@ -36,6 +70,7 @@ claude --plugin-dir ./claude-debug-mode
 ```
 
 You can also load multiple plugins:
+
 ```bash
 claude --plugin-dir ./claude-debug-mode --plugin-dir ./other-plugin
 ```
@@ -45,6 +80,7 @@ claude --plugin-dir ./claude-debug-mode --plugin-dir ./other-plugin
 ### Workflow
 
 1. **Start debugging** — Describe your bug:
+
    ```
    /debug-mode The checkout button isn't working
    ```
@@ -61,11 +97,11 @@ claude --plugin-dir ./claude-debug-mode --plugin-dir ./other-plugin
 
 When you report a bug, Claude creates specific, testable theories:
 
-| ID | Hypothesis |
-|----|------------|
-| A | `items` array is undefined when `order.items` isn't provided |
-| B | Race condition: `loadUser` completes after `renderProfile` |
-| C | API returns 200 but empty body on timeout |
+| ID  | Hypothesis                                                   |
+| --- | ------------------------------------------------------------ |
+| A   | `items` array is undefined when `order.items` isn't provided |
+| B   | Race condition: `loadUser` completes after `renderProfile`   |
+| C   | API returns 200 but empty body on timeout                    |
 
 Then instruments your code with logging:
 
@@ -78,10 +114,10 @@ async function processOrder(orderId, items) {
 
 // After (instrumented)
 async function processOrder(orderId, items) {
-  __debugLog('orders.ts:processOrder', 'A', 'Entry', { orderId, itemCount: items?.length });
+  __debugLog("orders.ts:processOrder", "A", "Entry", { orderId, itemCount: items?.length });
 
   const validated = validateItems(items);
-  __debugLog('orders.ts:processOrder', 'A', 'After validation', { validated: !!validated });
+  __debugLog("orders.ts:processOrder", "A", "After validation", { validated: !!validated });
 
   return await saveOrder(orderId, validated);
 }
@@ -118,18 +154,20 @@ Claude removes all instrumentation and provides a summary of the root cause and 
 
 ## Requirements
 
-- **Claude Code**
+- **Claude Code** or **Codex**
 - **Node.js** 18+ or **Bun**
 
 ## Configuration
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `DEBUG_PORT` | `7777` | Port for the log collector server |
+| Variable     | Default | Description                       |
+| ------------ | ------- | --------------------------------- |
+| `DEBUG_PORT` | `7777`  | Port for the log collector server |
 
 ```bash
 DEBUG_PORT=8080 claude --plugin-dir ./claude-debug-mode
 ```
+
+For skill installs, `DEBUG_PORT` is read by the bundled helper scripts at runtime. No agent-specific environment variables are required.
 
 ## How Logs Are Collected
 
