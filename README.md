@@ -21,27 +21,28 @@ The repo is packaged as a `skills.sh` bundle and can be installed into multiple 
 Install into Codex:
 
 ```bash
-bunx skills add https://github.com/mikecfisher/claude-debug-mode --agent codex -y
+bunx skills add https://github.com/mikecfisher/agent-debug-mode --agent codex -y
 ```
 
 Install into Claude Code:
 
 ```bash
-bunx skills add https://github.com/mikecfisher/claude-debug-mode --agent claude-code -y
+bunx skills add https://github.com/mikecfisher/agent-debug-mode --agent claude-code -y
 ```
 
 Install from a local checkout during development:
 
 ```bash
-bunx skills add /absolute/path/to/claude-debug-mode --agent codex -y
-bunx skills add /absolute/path/to/claude-debug-mode --agent claude-code -y
+bunx skills add /absolute/path/to/agent-debug-mode --agent codex -y
+bunx skills add /absolute/path/to/agent-debug-mode --agent claude-code -y
 ```
 
-The bundle exposes three skills:
+The bundle exposes four skills:
 
 - `debug-mode`
 - `debug-reproduced`
 - `debug-fixed`
+- `debug-auto`
 
 The skill runtime is self-contained. Each installed skill carries its own helper scripts, so it does not depend on `CLAUDE_PLUGIN_ROOT` or repo-root script paths.
 
@@ -50,13 +51,13 @@ The skill runtime is self-contained. Each installed skill carries its own helper
 First, add the marketplace:
 
 ```
-/plugin marketplace add mikecfisher/claude-debug-mode
+/plugin marketplace add mikecfisher/agent-debug-mode
 ```
 
 Then install the plugin:
 
 ```
-/plugin install debug-mode@mikecfisher-claude-debug-mode
+/plugin install debug-mode@mikecfisher-agent-debug-mode
 ```
 
 Restart Claude Code to load the plugin.
@@ -65,14 +66,14 @@ Restart Codex after installing skills there so the new skills are picked up.
 ### Option 3: Claude plugin local development
 
 ```bash
-git clone https://github.com/mikecfisher/claude-debug-mode.git
-claude --plugin-dir ./claude-debug-mode
+git clone https://github.com/mikecfisher/agent-debug-mode.git
+claude --plugin-dir ./agent-debug-mode
 ```
 
 You can also load multiple plugins:
 
 ```bash
-claude --plugin-dir ./claude-debug-mode --plugin-dir ./other-plugin
+claude --plugin-dir ./agent-debug-mode --plugin-dir ./other-plugin
 ```
 
 ## Usage
@@ -90,6 +91,22 @@ claude --plugin-dir ./claude-debug-mode --plugin-dir ./other-plugin
 3. **Report result** — Run one of:
    - `/debug-reproduced` — Bug still happening (Claude analyzes logs, iterates)
    - `/debug-fixed` — Bug is fixed (Claude cleans up instrumentation)
+
+### Autonomous Workflow
+
+For bugs the agent can reproduce itself (web UI via Chrome DevTools MCP, failing tests, build errors, API issues, CLI scripts):
+
+   ```
+   /debug-auto The checkout button doesn't submit the order
+   ```
+
+The agent handles the entire hypothesize → instrument → reproduce → analyze → fix → verify loop autonomously, up to 5 iterations. No manual reproduction steps needed.
+
+**Requirements:** Web UI debugging requires [Chrome DevTools MCP](https://github.com/ChromeDevTools/chrome-devtools-mcp). CLI, test, build, and API bugs work with just Bash.
+
+**When to use which:**
+- `/debug-auto` — Agent can trigger the bug (clickable UI, runnable tests/builds/commands)
+- `/debug-mode` — Bug requires physical device, specific user account, complex environment, or human judgment to reproduce
 
 ## How It Works
 
@@ -164,7 +181,7 @@ Claude removes all instrumentation and provides a summary of the root cause and 
 | `DEBUG_PORT` | `7777`  | Port for the log collector server |
 
 ```bash
-DEBUG_PORT=8080 claude --plugin-dir ./claude-debug-mode
+DEBUG_PORT=8080 claude --plugin-dir ./agent-debug-mode
 ```
 
 For skill installs, `DEBUG_PORT` is read by the bundled helper scripts at runtime. No agent-specific environment variables are required.
@@ -185,4 +202,4 @@ MIT
 
 ## Contributing
 
-Issues and PRs welcome at [github.com/mikecfisher/claude-debug-mode](https://github.com/mikecfisher/claude-debug-mode).
+Issues and PRs welcome at [github.com/mikecfisher/agent-debug-mode](https://github.com/mikecfisher/agent-debug-mode).
